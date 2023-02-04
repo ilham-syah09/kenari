@@ -26,7 +26,7 @@
                                             <th>Jml Pakan</th>
                                             <th>Jml Air</th>
                                             <th>Suhu</th>
-                                            <th>Kelembaban</th>
+                                            <th>Kelembapan</th>
                                             <th>Tanggal</th>
                                         </tr>
                                     </thead>
@@ -39,7 +39,7 @@
                                                 <td><?= $data->jml_pakan; ?></td>
                                                 <td><?= $data->jml_air; ?></td>
                                                 <td><?= $data->suhu; ?></td>
-                                                <td><?= $data->kelembaban; ?></td>
+                                                <td><?= $data->kelembapan; ?></td>
                                                 <td><?= $data->date; ?></td>
                                             </tr>
                                         <?php endforeach; ?>

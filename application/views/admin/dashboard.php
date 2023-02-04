@@ -65,10 +65,10 @@
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>Kelembaban</h4>
+                            <h4>Kelembapan</h4>
                         </div>
                         <div class="card-body">
-                            <h4 id="kelembaban"><?= ($nilai) ? $nilai->kelembaban : '0'; ?></h4>
+                            <h4 id="kelembapan"><?= ($nilai) ? $nilai->kelembapan : '0'; ?></h4>
                         </div>
                     </div>
                 </div>
@@ -102,19 +102,18 @@
             dataType: 'json',
             success: function(result) {
                 if (result.count > total) {
-
                     total = result.count;
                     var data_akhir = result.data;
                     var suhu = Number(data_akhir.suhu);
-                    var kelembaban = Number(data_akhir.kelembaban);
+                    var kelembapan = Number(data_akhir.kelembapan);
 
-                    var konfersi = new Date(Date.parse(data_akhir.waktu));
+                    var konfersi = new Date(Date.parse(data_akhir.date));
                     var waktu2 = konfersi.getHours() + ":" + konfersi.getMinutes() + ":" + konfersi
                         .getSeconds();
                     waktu.push(waktu2);
 
                     chart.series[0].addPoint([data_akhir.waktu, suhu], true, false);
-                    chart.series[1].addPoint([data_akhir.waktu, kelembaban], true, false);
+                    chart.series[1].addPoint([data_akhir.waktu, kelembapan], true, false);
                     chart.xAxis[0].setCategories(waktu);
                 }
 
@@ -147,7 +146,7 @@
                 $('#jml_pakan').text(result.data.jml_pakan + ' cm');
                 $('#jml_air').text(result.data.jml_air + ' cm');
                 $('#suhu').text(result.data.suhu);
-                $('#kelembaban').text(result.data.kelembaban);
+                $('#kelembapan').text(result.data.kelembapan);
 
                 setTimeout(tampil, 2000);
             }
@@ -163,7 +162,7 @@
                 }
             },
             title: {
-                text: 'Grafik Suhu dan Kelembaban'
+                text: 'Grafik Suhu dan Kelembapan'
             },
             xAxis: {
                 title: {
@@ -180,7 +179,7 @@
                 name: "Suhu",
                 data: []
             }, {
-                name: "Kelembaban",
+                name: "Kelembapan",
                 data: []
             }]
         });

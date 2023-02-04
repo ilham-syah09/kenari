@@ -3,21 +3,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Data extends CI_Controller
 {
-
     public function save()
     {
         $jml_pakan  = $this->input->get('jml_pakan');
         $jml_air    = $this->input->get('jml_air');
         $suhu       = $this->input->get('suhu');
-        $kelembaban = $this->input->get('kelembaban');
+        $kelembapan = $this->input->get('kelembapan');
 
-        if ($jml_pakan != null && $jml_air != null && $suhu != null && $kelembaban != null) {
+        if ($jml_pakan != null && $jml_air != null && $suhu != null && $kelembapan != null) {
 
             $data = [
                 'jml_pakan'     => $jml_pakan,
                 'jml_air'       => $jml_air,
                 'suhu'          => $suhu,
-                'kelembaban'    => $kelembaban,
+                'kelembapan'    => $kelembapan,
             ];
 
             $this->db->order_by('id', 'desc');
@@ -27,10 +26,10 @@ class Data extends CI_Controller
             $jmlpakan_sebelumnya    = $data_sebelumnya->jml_pakan;
             $jmlair_sebelumnya      = $data_sebelumnya->jml_air;
             $suhu_sebelumnya        = $data_sebelumnya->suhu;
-            $kelembaban_sebelumnya  = $data_sebelumnya->kelembaban;
+            $kelembapan_sebelumnya  = $data_sebelumnya->kelembapan;
 
             if ($data_sebelumnya) {
-                if ($jmlpakan_sebelumnya != $jml_pakan || $jmlair_sebelumnya != $jml_air || $suhu_sebelumnya != $suhu || $kelembaban_sebelumnya != $kelembaban) {
+                if ($jmlpakan_sebelumnya != $jml_pakan || $jmlair_sebelumnya != $jml_air || $suhu_sebelumnya != $suhu || $kelembapan_sebelumnya != $kelembapan) {
 
                     $this->db->insert('tb_data', $data);
 
@@ -46,6 +45,16 @@ class Data extends CI_Controller
         } else {
             echo 'Data kosong';
         }
+    }
+
+    public function jadwal()
+    {
+        $jadwal = $this->db->get('tb_jadwal')->row();
+
+        $jam_sekarang = date('H:i');
+
+
+        echo json_encode($jam_sekarang);
     }
 }
 
