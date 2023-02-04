@@ -1,0 +1,52 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Data extends CI_Controller
+{
+
+    public function save()
+    {
+        $jml_pakan  = $this->input->get('jml_pakan');
+        $jml_air    = $this->input->get('jml_air');
+        $suhu       = $this->input->get('suhu');
+        $kelembaban = $this->input->get('kelembaban');
+
+        if ($jml_pakan != null && $jml_air != null && $suhu != null && $kelembaban != null) {
+
+            $data = [
+                'jml_pakan'     => $jml_pakan,
+                'jml_air'       => $jml_air,
+                'suhu'          => $suhu,
+                'kelembaban'    => $kelembaban,
+            ];
+
+            $this->db->order_by('id', 'desc');
+
+            $data_sebelumnya = $this->db->get('tb_data', 1)->row();
+
+            $jmlpakan_sebelumnya    = $data_sebelumnya->jml_pakan;
+            $jmlair_sebelumnya      = $data_sebelumnya->jml_air;
+            $suhu_sebelumnya        = $data_sebelumnya->suhu;
+            $kelembaban_sebelumnya  = $data_sebelumnya->kelembaban;
+
+            if ($data_sebelumnya) {
+                if ($jmlpakan_sebelumnya != $jml_pakan || $jmlair_sebelumnya != $jml_air || $suhu_sebelumnya != $suhu || $kelembaban_sebelumnya != $kelembaban) {
+
+                    $this->db->insert('tb_data', $data);
+
+                    echo 'data berhasil masuk';
+                } else {
+                    echo 'nilai data masih sama';
+                }
+            } else {
+                $this->db->insert('tb_data', $data);
+
+                echo 'data berhasil masuk';
+            }
+        } else {
+            echo 'Data kosong';
+        }
+    }
+}
+
+/* End of file Data.php */
