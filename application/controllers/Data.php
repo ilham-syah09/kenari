@@ -59,7 +59,6 @@ class Data extends CI_Controller
             echo "OFF#" . $data->kondisi_suhu . "#OK";
         }
     }
-    // adhakd bastian
 }
 
-/* End of file Data.php*/
+/* End of file Data.php */
