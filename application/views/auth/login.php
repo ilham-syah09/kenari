@@ -1,11 +1,11 @@
 <div class="card card-primary">
 
-    <div class="card-body">
-        <div class="text-center">
-            <img src="<?= base_url('assets/img/phb-logo.png'); ?>" class="img-fluid" width="100" alt="">
-            <h4 class="mt-2"><?= $title; ?></h4>
-        </div>
-        <form method="post" action="<?= base_url('auth/proses'); ?>" id="form-login">
+    <form method="post" action="<?= base_url('auth/proses'); ?>" id="form-login">
+        <div class="card-body">
+            <div class="text-center">
+                <img src="<?= base_url('assets/img/phb-logo.png'); ?>" class="img-fluid" width="100" alt="">
+                <h4 class="mt-2"><?= $title; ?></h4>
+            </div>
             <div class="row">
                 <div class="form-group col-md">
                     <label>Username</label>
@@ -24,8 +24,6 @@
                     Login
                 </button>
             </div>
-
-
-        </form>
-    </div>
+        </div>
+    </form>
 </div>

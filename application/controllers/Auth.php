@@ -48,7 +48,7 @@ class Auth extends CI_Controller
                 redirect('admin');
             } else {
                 $this->session->set_flashdata('toastr-eror', $user);
-                redirect('login');
+                redirect('auth');
             }
         }
     }
