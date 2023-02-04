@@ -58,6 +58,7 @@ class Auth extends CI_Controller
         $this->session->sess_destroy($this->session->userdata('log_admin'));
         redirect('auth', 'refresh');
     }
+    // contoh
 }
 
 /* End of file User.php */
