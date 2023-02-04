@@ -33,14 +33,14 @@ class Data extends CI_Controller
 
                     $this->db->insert('tb_data', $data);
 
-                    echo 'data berhasil masuk';
+                    echo 'Data berhasil masuk';
                 } else {
-                    echo 'nilai data masih sama';
+                    echo 'Nilai data masih sama';
                 }
             } else {
                 $this->db->insert('tb_data', $data);
 
-                echo 'data berhasil masuk';
+                echo 'Data berhasil masuk';
             }
         } else {
             echo 'Data kosong';
