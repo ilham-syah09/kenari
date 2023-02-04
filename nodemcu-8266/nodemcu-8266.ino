@@ -32,13 +32,17 @@ int tinggiTandonAir = 20;
 // Pin Kipas
 #define kipas D5
 
+// Pin Nozle
+#define nozle D8
+
 #define relay_on LOW
 #define relay_off HIGH
 
 // URL WEB IOT
 String urlSimpan = "http://192.168.40.7/kenari/data/save?suhu=";
+String urlGetSetting = "http://192.168.40.7/kenari/data/setting";
 
-String respon;
+String respon, responSetting, jadwalNozle, kondisiSuhu = "30";
 
 void setup() {
   Serial.begin(115200);   //Komunikasi baud rate
@@ -84,12 +88,18 @@ void setup() {
   // deklarasi pin kipas
   pinMode(kipas, OUTPUT);
   digitalWrite(kipas, relay_off);
+
+  // deklarasi pin nozle
+  pinMode(nozle, OUTPUT);
+  digitalWrite(nozle, relay_off);
   
   delay(1000);
   Serial.println();
 }
 
 void loop() {
+  jadwalNozle = "OFF";
+  
   // coding suhu
   int suhu = dht.readTemperature();
   int kelembapan = dht.readHumidity();
@@ -131,6 +141,43 @@ void loop() {
   {
     tinggiAir = 0;
   }
+
+  // ambil data setting
+  if ((WiFiMulti.run() == WL_CONNECTED))
+  {
+    USE_SERIAL.print("[HTTP] Memulai...\n");
+    
+    http.begin(client, urlGetSetting );
+    
+    USE_SERIAL.print("[HTTP] Ambil data jadwalNozle dan kondisi suhu di database ...\n");
+    int httpCode = http.GET();
+
+    if(httpCode > 0)
+    {
+      USE_SERIAL.printf("[HTTP] kode response GET : %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK)
+      {
+        Serial.println();
+        
+        responSetting = http.getString();
+
+        jadwalNozle = getValue(responSetting, '#', 0);
+        kondisiSuhu = getValue(responSetting, '#', 1);
+
+        USE_SERIAL.println("jadwalNozle Nozle : " + jadwalNozle);
+        USE_SERIAL.println("Kondisi Suhu : " + kondisiSuhu);
+        delay(200);
+      }
+    }
+    else
+    {
+      USE_SERIAL.printf("[HTTP] GET data gagal, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+  }
+
+  Serial.println();
   
   if (isnan(kelembapan) || isnan(suhu)) {
     Serial.println("Failed to read from DHT sensor!");
@@ -151,7 +198,7 @@ void loop() {
 
       Serial.println();
 
-      if (suhu > 30) {
+      if (suhu > kondisiSuhu.toInt()) {
         Serial.println("Kipas ON");
         digitalWrite(kipas, relay_on);
       } else {
@@ -195,5 +242,31 @@ void loop() {
     Serial.println();
   }
 
+  if (jadwalNozle == "ON") {
+    Serial.println("Nozle ON");
+    pinMode(nozle, relay_on);
+  } else {
+    Serial.println("Nozle OFF");
+    pinMode(nozle, relay_off);
+  }
+
+  Serial.println();
   delay(1000);
+}
+
+String getValue(String data, char separator, int index)
+{
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+ 
+  for(int i=0; i <= maxIndex && found <= index; i++){
+    if(data.charAt(i) == separator || i == maxIndex){
+        found++;
+        strIndex[0] = strIndex[1]+1;
+        strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  } 
+ 
+  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
 }

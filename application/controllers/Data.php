@@ -47,14 +47,17 @@ class Data extends CI_Controller
         }
     }
 
-    public function jadwal()
+    public function setting()
     {
-        $jadwal = $this->db->get('tb_jadwal')->row();
+        $data = $this->db->get('tb_setting')->row();
 
         $jam_sekarang = date('H:i');
 
-
-        echo json_encode($jam_sekarang);
+        if ($jam_sekarang == $data->jadwal) {
+            echo "ON#" . $data->kondisi_suhu . "#OK";
+        } else {
+            echo "OFF#" . $data->kondisi_suhu . "#OK";
+        }
     }
 }
 
