@@ -99,6 +99,8 @@
 
                             <li class="<?= ($this->uri->segment(1) === "list-admin") ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('list-admin'); ?>"><i class="fas fa-list"></i> <span>List Admin</span></a></li>
 
+                            <li class="<?= ($this->uri->segment(1) === "setting") ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('setting'); ?>"><i class="fas fa-asterisk"></i> <span>Setting</span></a></li>
+
                         <?php endif; ?>
                     </ul>
                 </aside>
