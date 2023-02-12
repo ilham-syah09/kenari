@@ -39,8 +39,8 @@ int tinggiTandonAir = 20;
 #define relay_off HIGH
 
 // URL WEB IOT
-String urlSimpan = "http://192.168.40.7/kenari/data/save?suhu=";
-String urlGetSetting = "http://192.168.40.7/kenari/data/setting";
+String urlSimpan = "http://192.168.40.185/kenari/data/save?suhu=";
+String urlGetSetting = "http://192.168.40.185/kenari/data/setting";
 
 String respon, responSetting, jadwalNozle, kondisiSuhu = "30";
 

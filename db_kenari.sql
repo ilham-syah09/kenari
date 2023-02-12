@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `tb_admin` (
   `id` int(11) NOT NULL,
   `username` varchar(100) NOT NULL,
-  `image` text NOT NULL DEFAULT 'default.png',
+  `image` text NOT NULL,
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
