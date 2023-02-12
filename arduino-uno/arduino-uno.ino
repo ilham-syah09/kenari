@@ -1,18 +1,18 @@
 // Inisialisasi pin Ultrasonik
-#define pakanPinTrigger D1
-#define pakanPinEcho D2
+#define pakanPinTrigger 2
+#define pakanPinEcho 3
 
-#define airPinTrigger D6
-#define airPinEcho D7
+#define airPinTrigger 4
+#define airPinEcho 5
 
 // deklarasi tinggi wadah
 int tinggiWadahPakan = 10;
 int tinggiWadahAir = 10;
 
-#define selenoid D5
+#define selenoid 6
 
-#define relay_on LOW
-#define relay_off HIGH
+#define relay_on HIGH
+#define relay_off LOW
 
 #include <Servo.h>
 Servo servoPakan;
@@ -30,7 +30,7 @@ void setup() {
   pinMode(selenoid, OUTPUT);
   digitalWrite(selenoid, relay_off);
 
-  servoPakan.attach(D0);
+  servoPakan.attach(7);
   servoPakan.write(0);
 
   delay(1000);
@@ -85,16 +85,11 @@ void loop() {
     Serial.println("Sedang mengisi pakan");
 
     servoPakan.write(90);
-    delay(300);
+    delay(400);
     servoPakan.write(0);
-    delay(300);
+    delay(400);
     servoPakan.write(90);
-    delay(300);
-    servoPakan.write(0);
-    delay(300);
-    servoPakan.write(90);
-    delay(300);
-    servoPakan.write(0);
+    delay(400);
   }
 
   if (tinggiAir <= 5) {
