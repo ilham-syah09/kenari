@@ -51,13 +51,15 @@ class Data extends CI_Controller
     {
         $data = $this->db->get('tb_setting')->row();
 
-        $jam_sekarang = date('H:i');
+        echo $data->status . "#" . $data->kondisi_suhu . "#OK";
 
-        if ($jam_sekarang == $data->jadwal) {
-            echo "ON#" . $data->kondisi_suhu . "#OK";
-        } else {
-            echo "OFF#" . $data->kondisi_suhu . "#OK";
-        }
+        // $jam_sekarang = date('H:i');
+
+        // if ($jam_sekarang == $data->jadwal) {
+        //     echo "ON#" . $data->kondisi_suhu . "#OK";
+        // } else {
+        //     echo "OFF#" . $data->kondisi_suhu . "#OK";
+        // }
     }
 }
 

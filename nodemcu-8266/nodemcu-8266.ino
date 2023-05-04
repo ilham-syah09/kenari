@@ -42,25 +42,27 @@ int tinggiTandonAir = 20;
 String urlSimpan = "http://192.168.40.185/kenari/data/save?suhu=";
 String urlGetSetting = "http://192.168.40.185/kenari/data/setting";
 
-String respon, responSetting, jadwalNozle, kondisiSuhu = "30";
+String respon, responSetting, statusNozle, kondisiSuhu = "30";
 
-void setup() {
-  Serial.begin(115200);   //Komunikasi baud rate
+void setup()
+{
+  Serial.begin(115200); // Komunikasi baud rate
 
   USE_SERIAL.begin(115200);
   USE_SERIAL.setDebugOutput(false);
 
-  for(uint8_t t = 4; t > 0; t--) {
-      USE_SERIAL.printf("[SETUP] Tunggu %d...\n", t);
-      USE_SERIAL.flush();
-      delay(1000);
+  for (uint8_t t = 4; t > 0; t--)
+  {
+    USE_SERIAL.printf("[SETUP] Tunggu %d...\n", t);
+    USE_SERIAL.flush();
+    delay(1000);
   }
 
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP("Redmi", "123456789"); // Sesuaikan SSID dan password ini
 
   Serial.println();
-  
+
   for (int u = 1; u <= 5; u++)
   {
     if ((WiFiMulti.run() == WL_CONNECTED))
@@ -77,7 +79,7 @@ void setup() {
   }
 
   dht.begin(); // dht mulai bekerja/ on
-  
+
   //  deklarasi pin ultrasonik
   pinMode(pakanPinTrigger, OUTPUT);
   pinMode(pakanPinEcho, INPUT);
@@ -92,14 +94,15 @@ void setup() {
   // deklarasi pin nozle
   pinMode(nozle, OUTPUT);
   digitalWrite(nozle, relay_off);
-  
+
   delay(1000);
   Serial.println();
 }
 
-void loop() {
-  jadwalNozle = "OFF";
-  
+void loop()
+{
+  statusNozle = "0";
+
   // coding suhu
   int suhu = dht.readTemperature();
   int kelembapan = dht.readHumidity();
@@ -146,26 +149,26 @@ void loop() {
   if ((WiFiMulti.run() == WL_CONNECTED))
   {
     USE_SERIAL.print("[HTTP] Memulai...\n");
-    
-    http.begin(client, urlGetSetting );
-    
-    USE_SERIAL.print("[HTTP] Ambil data jadwalNozle dan kondisi suhu di database ...\n");
+
+    http.begin(client, urlGetSetting);
+
+    USE_SERIAL.print("[HTTP] Ambil data statusNozle dan kondisi suhu di database ...\n");
     int httpCode = http.GET();
 
-    if(httpCode > 0)
+    if (httpCode > 0)
     {
       USE_SERIAL.printf("[HTTP] kode response GET : %d\n", httpCode);
 
       if (httpCode == HTTP_CODE_OK)
       {
         Serial.println();
-        
+
         responSetting = http.getString();
 
-        jadwalNozle = getValue(responSetting, '#', 0);
+        statusNozle = getValue(responSetting, '#', 0);
         kondisiSuhu = getValue(responSetting, '#', 1);
 
-        USE_SERIAL.println("jadwalNozle Nozle : " + jadwalNozle);
+        USE_SERIAL.println("statusNozle Nozle : " + statusNozle);
         USE_SERIAL.println("Kondisi Suhu : " + kondisiSuhu);
         delay(200);
       }
@@ -178,12 +181,16 @@ void loop() {
   }
 
   Serial.println();
-  
-  if (isnan(kelembapan) || isnan(suhu)) {
+
+  if (isnan(kelembapan) || isnan(suhu))
+  {
     Serial.println("Failed to read from DHT sensor!");
-  } else {
+  }
+  else
+  {
     Serial.println();
-    if (suhu < 100 || kelembapan < 100) {
+    if (suhu < 100 || kelembapan < 100)
+    {
       Serial.print("Suhu : ");
       Serial.println(suhu);
       Serial.print("Kelembapan Udara : ");
@@ -198,30 +205,33 @@ void loop() {
 
       Serial.println();
 
-      if (suhu > kondisiSuhu.toInt()) {
+      if (suhu > kondisiSuhu.toInt())
+      {
         Serial.println("Kipas ON");
         digitalWrite(kipas, relay_on);
-      } else {
+      }
+      else
+      {
         Serial.println("Kipas OFF");
         digitalWrite(kipas, relay_off);
       }
 
       Serial.println();
-      
+
       // kirim data sensor ke website
       if ((WiFiMulti.run() == WL_CONNECTED))
       {
         USE_SERIAL.print("[HTTP] Memulai...\n");
-        
-        http.begin(client, urlSimpan + (String) suhu + "&kelembapan=" + (String) kelembapan + "&jml_pakan=" + (String) tinggiPakan + "&jml_air=" + (String) tinggiAir );
-        
+
+        http.begin(client, urlSimpan + (String)suhu + "&kelembapan=" + (String)kelembapan + "&jml_pakan=" + (String)tinggiPakan + "&jml_air=" + (String)tinggiAir);
+
         USE_SERIAL.print("[HTTP] Menyimpan data sensor ke database ...\n");
         int httpCode = http.GET();
-    
-        if(httpCode > 0)
+
+        if (httpCode > 0)
         {
           USE_SERIAL.printf("[HTTP] kode response GET : %d\n", httpCode);
-    
+
           if (httpCode == HTTP_CODE_OK)
           {
             respon = http.getString();
@@ -235,17 +245,22 @@ void loop() {
         }
         http.end();
       }
-    } else {
+    }
+    else
+    {
       Serial.println("Failed to read from DHT sensor!");
     }
-    
+
     Serial.println();
   }
 
-  if (jadwalNozle == "ON") {
+  if (statusNozle == "1")
+  {
     Serial.println("Nozle ON");
     pinMode(nozle, relay_on);
-  } else {
+  }
+  else
+  {
     Serial.println("Nozle OFF");
     pinMode(nozle, relay_off);
   }
@@ -258,15 +273,17 @@ String getValue(String data, char separator, int index)
 {
   int found = 0;
   int strIndex[] = {0, -1};
-  int maxIndex = data.length()-1;
- 
-  for(int i=0; i <= maxIndex && found <= index; i++){
-    if(data.charAt(i) == separator || i == maxIndex){
-        found++;
-        strIndex[0] = strIndex[1]+1;
-        strIndex[1] = (i == maxIndex) ? i+1 : i;
+  int maxIndex = data.length() - 1;
+
+  for (int i = 0; i <= maxIndex && found <= index; i++)
+  {
+    if (data.charAt(i) == separator || i == maxIndex)
+    {
+      found++;
+      strIndex[0] = strIndex[1] + 1;
+      strIndex[1] = (i == maxIndex) ? i + 1 : i;
     }
-  } 
- 
-  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
+  }
+
+  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }

@@ -30,16 +30,16 @@ class Setting extends CI_Controller
 
     public function change_setting()
     {
-        $this->form_validation->set_rules('jadwal', 'Jadwal', 'trim|required');
         $this->form_validation->set_rules('kondisi_suhu', 'Kondisi Suhu', 'trim|required|numeric');
 
 
         if ($this->form_validation->run() == FALSE) {
             $this->index();
             $this->session->set_flashdata('toastr-eror', 'isi semua kolom!');
+            redirect('setting');
         } else {
             $data = [
-                'jadwal'    => $this->input->post('jadwal'),
+                'status'          => $this->input->post('status'),
                 'kondisi_suhu'    => $this->input->post('kondisi_suhu'),
             ];
 

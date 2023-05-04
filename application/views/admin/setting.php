@@ -18,12 +18,15 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="<?= base_url('setting/change_setting'); ?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?= base_url('setting/change_setting'); ?>" method="POST">
                             <input type="hidden" value="<?= $data->id; ?>" name="id">
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Jadwal</label>
-                                    <input type="text" class="form-control" name="jadwal" value="<?= $data->jadwal; ?>" placeholder="12:00">
+                                    <label>Status Pompa</label>
+                                    <select class="form-control" name="status">
+                                        <option value="0" <?php if ($data->status == 0) echo 'selected="selected"'; ?>>OFF</option>
+                                        <option value="1" <?php if ($data->status == 1) echo 'selected="selected"'; ?>>ON</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Kondisi Suhu</label>

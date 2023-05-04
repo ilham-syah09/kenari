@@ -162,7 +162,6 @@
     <script src="<?= base_url(); ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/modules/izitoast/js/iziToast.min.js"></script>
 
-    <script src="<?= base_url(); ?>assets/modules/jquery-selectric/jquery.selectric.min.js"></script>
     <script src="<?= base_url(); ?>assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
     <script src="<?= base_url(); ?>assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 
