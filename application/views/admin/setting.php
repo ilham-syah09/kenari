@@ -11,9 +11,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="alert alert-primary" role="alert">
-                    <h4 class="alert-heading">Setting waktu dan suhu</h4>
+                    <h4 class="alert-heading">Setting Nozle dan Suhu</h4>
                     <hr>
-                    <p class="mb-0">Format waktu H:i 24 Jam contoh 19:30</p>
+                    <p class="mb-0">ON / OFF Nozle</p>
                     <p class="mb-0">Kondisi suhu hanya diisi angka!</p>
                 </div>
                 <div class="card">

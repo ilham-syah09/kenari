@@ -116,7 +116,7 @@
 
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2022 <div class="bullet"></div><a href="https://github.com/ilham-syah09/">Ilham Syah</a>
+                    Copyright &copy; 2023 <div class="bullet"></div><a href="">Website Monitoring Burung Kenari</a>
                 </div>
                 <div class="footer-right">
 

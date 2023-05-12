@@ -73,6 +73,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+//hosting
+//username : phbcompu_kenari
+//password : 6t5bO32m^
+//db_name : phbcompu_kenari
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',

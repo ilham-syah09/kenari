@@ -36,10 +36,10 @@
                                             <tr>
                                                 <td><input type="checkbox" class="check-item" name="id[]" value="<?= $data->id; ?>"></td>
                                                 <td class="text-center"><?= $i++; ?></td>
-                                                <td><?= $data->jml_pakan; ?></td>
-                                                <td><?= $data->jml_air; ?></td>
-                                                <td><?= $data->suhu; ?></td>
-                                                <td><?= $data->kelembapan; ?></td>
+                                                <td><?= $data->jml_pakan; ?> cm</td>
+                                                <td><?= $data->jml_air; ?> cm</td>
+                                                <td><?= $data->suhu; ?> <sup>o</sup>C</td>
+                                                <td><?= $data->kelembapan; ?> %</td>
                                                 <td><?= $data->date; ?></td>
                                             </tr>
                                         <?php endforeach; ?>

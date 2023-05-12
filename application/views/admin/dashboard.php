@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <h4 id="jml_air"><?= ($nilai) ? $nilai->jml_air : '0'; ?></h4>
 
-                            <div class="h6 mb-1 font-weight-bold text-danger" id="statusair"></div>
+                            <div class="h6 mb-1 font-weight-bold text-danger" id="status_air"></div>
 
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="card-body">
                             <h4 id="jml_pakan"><?= ($nilai) ? $nilai->jml_pakan : '0'; ?></h4>
-                            <div class="h6 mb-1 font-weight-bold text-danger" id="statuspakan"></div>
+                            <div class="h6 mb-1 font-weight-bold text-danger" id="status_pakan"></div>
                         </div>
                     </div>
                 </div>
@@ -123,30 +123,18 @@
     }
 
     function tampil() {
-        var low = "Habis";
-        var medium = "Sedang";
-        var high = "Penuh";
 
         $.ajax({
             url: "<?= base_url('admin/get_realtime') ?>",
             dataType: 'json',
             success: function(result) {
 
-                if (result.data.jml_pakan < 20 || result.data.jml_air < 20) {
-                    $('#statuspakan').text(low);
-                    $('#statusair').text(low);
-                } else if (result.data.jml_pakan < 40 || result.data.jml_air < 40) {
-                    $('#statuspakan').text(medium);
-                    $('#statusair').text(medium);
-                } else {
-                    $('#statuspakan').text(high);
-                    $('#statusair').text(high);
-                }
-
                 $('#jml_pakan').text(result.data.jml_pakan + ' cm');
                 $('#jml_air').text(result.data.jml_air + ' cm');
-                $('#suhu').text(result.data.suhu);
-                $('#kelembapan').text(result.data.kelembapan);
+                $('#suhu').html(result.data.suhu + ` <sup>o</sup>C`);
+                $('#kelembapan').text(result.data.kelembapan + ' %');
+                $('#status_pakan').text(result.data.status_pakan);
+                $('#status_air').text(result.data.status_air);
 
                 setTimeout(tampil, 2000);
             }

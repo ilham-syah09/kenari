@@ -5,6 +5,24 @@ class Data extends CI_Controller
 {
     public function save()
     {
+        if ($this->input->get('jml_pakan') < 3) {
+            $status_pakan = "FULL";
+        } elseif ($this->input->get('jml_pakan') >= 3 && $this->input->get('jml_pakan') >= 5) {
+            $status_pakan = "MEDIUM";
+        } else {
+            $status_pakan = "LOW";
+        }
+
+
+        if ($this->input->get('jml_air') < 3) {
+            $status_air = "FULL";
+        } elseif ($this->input->get('jml_air') >= 3 && $this->input->get('jml_air') >= 5) {
+            $status_air = "MEDIUM";
+        } else {
+            $status_air = "LOW";
+        }
+
+
         $jml_pakan  = $this->input->get('jml_pakan');
         $jml_air    = $this->input->get('jml_air');
         $suhu       = $this->input->get('suhu');
@@ -17,6 +35,8 @@ class Data extends CI_Controller
                 'jml_air'       => $jml_air,
                 'suhu'          => $suhu,
                 'kelembapan'    => $kelembapan,
+                'status_pakan'  => $status_pakan,
+                'status_air'    => $status_air,
             ];
 
             $this->db->order_by('id', 'desc');
@@ -52,14 +72,6 @@ class Data extends CI_Controller
         $data = $this->db->get('tb_setting')->row();
 
         echo $data->status . "#" . $data->kondisi_suhu . "#OK";
-
-        // $jam_sekarang = date('H:i');
-
-        // if ($jam_sekarang == $data->jadwal) {
-        //     echo "ON#" . $data->kondisi_suhu . "#OK";
-        // } else {
-        //     echo "OFF#" . $data->kondisi_suhu . "#OK";
-        // }
     }
 }
 

@@ -5,6 +5,9 @@
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 
+//wifi manager
+#include <WiFiManager.h>
+
 #define USE_SERIAL Serial
 ESP8266WiFiMulti WiFiMulti;
 WiFiClient client;
@@ -22,7 +25,7 @@ DHT dht(DHTPIN, DHTTYPE);
 #define pakanPinTrigger D1
 #define pakanPinEcho D2
 
-#define airPinTrigger D6
+#define airPinTrigger D8
 #define airPinEcho D7
 
 // deklarasi tinggi tandon
@@ -33,20 +36,37 @@ int tinggiTandonAir = 20;
 #define kipas D5
 
 // Pin Nozle
-#define nozle D8
+#define nozle D6
+
+
+// URL WEB IOT
+String urlSimpan = "http://testing.codesolution.my.id/data/save?suhu=";
+String urlGetSetting = "http://testing.codesolution.my.id/data/setting";
+
+String respon, responSetting, statusNozle, kondisiSuhu = "30";
 
 #define relay_on LOW
 #define relay_off HIGH
 
-// URL WEB IOT
-String urlSimpan = "http://192.168.40.185/kenari/data/save?suhu=";
-String urlGetSetting = "http://192.168.40.185/kenari/data/setting";
-
-String respon, responSetting, statusNozle, kondisiSuhu = "30";
-
 void setup()
 {
+  WiFi.mode(WIFI_STA);
+
   Serial.begin(115200); // Komunikasi baud rate
+  
+  WiFiManager wm;
+  wm.resetSettings();
+  bool res;
+  res = wm.autoConnect("Kenari","12345678"); // password protected ap
+
+  if(!res) {
+      Serial.println("Failed to connect");
+      // ESP.restart();
+  } 
+  else {
+      //if you get here you have connected to the WiFi    
+      Serial.println("connected...yeey :)");
+  }
 
   USE_SERIAL.begin(115200);
   USE_SERIAL.setDebugOutput(false);
@@ -58,25 +78,8 @@ void setup()
     delay(1000);
   }
 
-  WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("Redmi", "123456789"); // Sesuaikan SSID dan password ini
 
   Serial.println();
-
-  for (int u = 1; u <= 5; u++)
-  {
-    if ((WiFiMulti.run() == WL_CONNECTED))
-    {
-      USE_SERIAL.println("Internet Connected");
-      USE_SERIAL.flush();
-      delay(1000);
-    }
-    else
-    {
-      Serial.println("No Internet Connected");
-      delay(1000);
-    }
-  }
 
   dht.begin(); // dht mulai bekerja/ on
 
@@ -138,6 +141,9 @@ void loop()
   //  Rumus pembacaan jarak tinggi
   jarak2 = (duration2 / 2) / 29.1;
 
+  Serial.print("jarak : ");
+  Serial.println(jarak2);
+
   tinggiAir = tinggiTandonAir - jarak2;
 
   if (tinggiAir < 0)
@@ -146,8 +152,6 @@ void loop()
   }
 
   // ambil data setting
-  if ((WiFiMulti.run() == WL_CONNECTED))
-  {
     USE_SERIAL.print("[HTTP] Memulai...\n");
 
     http.begin(client, urlGetSetting);
@@ -178,7 +182,6 @@ void loop()
       USE_SERIAL.printf("[HTTP] GET data gagal, error: %s\n", http.errorToString(httpCode).c_str());
     }
     http.end();
-  }
 
   Serial.println();
 
@@ -219,8 +222,6 @@ void loop()
       Serial.println();
 
       // kirim data sensor ke website
-      if ((WiFiMulti.run() == WL_CONNECTED))
-      {
         USE_SERIAL.print("[HTTP] Memulai...\n");
 
         http.begin(client, urlSimpan + (String)suhu + "&kelembapan=" + (String)kelembapan + "&jml_pakan=" + (String)tinggiPakan + "&jml_air=" + (String)tinggiAir);
@@ -244,7 +245,6 @@ void loop()
           USE_SERIAL.printf("[HTTP] GET data gagal, error: %s\n", http.errorToString(httpCode).c_str());
         }
         http.end();
-      }
     }
     else
     {
@@ -257,12 +257,12 @@ void loop()
   if (statusNozle == "1")
   {
     Serial.println("Nozle ON");
-    pinMode(nozle, relay_on);
+    digitalWrite(nozle, relay_on);
   }
   else
   {
     Serial.println("Nozle OFF");
-    pinMode(nozle, relay_off);
+    digitalWrite(nozle, relay_off);
   }
 
   Serial.println();
